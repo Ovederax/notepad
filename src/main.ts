@@ -1,6 +1,6 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
+import * as Vue from 'vue'
+import {store} from './store'
+import HomeView from '@/views/HomeView.vue'
+import 'bootstrap/dist/css/bootstrap.css'
 
-createApp(App).use(store).use(router).mount("#app");
+Vue.createApp(HomeView).use(store).mount('#app')

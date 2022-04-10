@@ -1,41 +1,29 @@
-<!--Минимальную архитектуру приложения:
-разбить на логические составляющие, выделить сущности.-->
-<!--Сервис CRUD над сущностью User с полями - id, name:-->
-
-<!--cоздание-->
-<!--изменение-->
-<!--поиск по полю name-->
-<!--удаление-->
-
-<!--C несколькими реализациями репозитория - в памяти и localStorage, реализация репозитория выбирается при инициализации приложения.-->
-<!--UI - Страница для работы с сервисом (Оформление - bootstrap и т.п.)-->
-<!--Cделать сборку проекта (Webpack, Gulp и прочие ...)-->
-<!--Выложить проект на GitHub-->
-
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent} from 'vue'
+import {store} from '@/store'
+import {User} from '@/models/User'
 
 export default defineComponent({
-  name: "UserInputForm",
+  name: 'UserInputForm',
   props: {
-    msg: String,
+    msg: String
   },
   data: () => ({
-    username: "",
-    phone: "",
+    username: '',
+    phone: ''
   }),
   methods: {
-    onChangeUsername(event: HTMLInputElement) {
-      console.log(event);
+    onChangeUsername(event: Event) {
+      this.username = (event.target as HTMLInputElement).value
     },
-    onChangePhone(event: HTMLInputElement) {
-      console.log(event);
+    onChangePhone(event: Event) {
+      this.phone = (event.target as HTMLInputElement).value
     },
     onClickSubmit() {
-      console.log(this.$data);
-    },
-  },
-});
+      store.dispatch('ADD_USERS', new User(this.username, this.phone))
+    }
+  }
+})
 </script>
 
 <!-- Template -->
@@ -44,13 +32,22 @@ export default defineComponent({
   <div class="container">
     <h1>Create new user</h1>
     <div>
-      <input
-        type="text"
-        v-bind:value="username"
-        v-on:change="onChangeUsername"
-      />
-      <input type="text" v-bind:value="phone" v-on:change="onChangePhone" />
-      <button v-on:click="onClickSubmit">Submit</button>
+      <div class="mb-3">
+        <label for="usernameInput" class="form-label">Username</label>
+        <input
+          type="text"
+          class="form-control"
+          id="usernameInput"
+          v-bind:value="username"
+          v-on:change="onChangeUsername"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="phoneInput" class="form-label">Phone</label>
+        <input type="text" class="form-control" id="phoneInput" v-bind:value="phone" v-on:change="onChangePhone" />
+      </div>
+
+      <button class="btn btn-primary" v-on:click="onClickSubmit">Submit</button>
     </div>
   </div>
 </template>
