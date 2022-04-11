@@ -39,12 +39,12 @@ export default defineComponent({
           class="form-control"
           id="usernameInput"
           v-bind:value="username"
-          v-on:change="onChangeUsername"
+          v-on:input="onChangeUsername"
         />
       </div>
       <div class="mb-3">
         <label for="phoneInput" class="form-label">Phone</label>
-        <input type="text" class="form-control" id="phoneInput" v-bind:value="phone" v-on:change="onChangePhone" />
+        <input type="text" class="form-control" id="phoneInput" v-bind:value="phone" v-on:input="onChangePhone" />
       </div>
 
       <button class="btn btn-primary" v-on:click="onClickSubmit">Submit</button>
