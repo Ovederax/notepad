@@ -5,9 +5,13 @@ export class User {
   username: string
   phone: string
 
-  constructor(username: string, phone: string) {
-    this.id = Guid.create().toString()
+  constructor(id: string, username: string, phone: string) {
+    this.id = id
     this.username = username
     this.phone = phone
+  }
+
+  static create(username: string, phone: string) {
+    return new User(Guid.create().toString(), username, phone)
   }
 }

@@ -1,3 +1,17 @@
+<!--Минимальную архитектуру приложения:
+разбить на логические составляющие, выделить сущности.-->
+<!--Сервис CRUD над сущностью User с полями - id, name:-->
+
+<!--cоздание-->
+<!--изменение-->
+<!--поиск по полю name-->
+<!--удаление-->
+
+<!--C несколькими реализациями репозитория - в памяти и localStorage, реализация репозитория выбирается при инициализации приложения.-->
+<!--UI - Страница для работы с сервисом (Оформление - bootstrap и т.п.)-->
+<!--Cделать сборку проекта (Webpack, Gulp и прочие ...)-->
+<!--Выложить проект на GitHub-->
+
 <script lang="ts">
 import {defineComponent} from 'vue'
 import {store} from '@/store'
@@ -9,7 +23,7 @@ export default defineComponent({
       return store.state.users
     },
     filteredUsers() {
-      return store.state.users.filter(it => it.username.search(this.searchUsernamePattern) !== -1)
+      return store.state.users.filter(it => it.username.toLowerCase().search(this.searchUsernamePattern) !== -1)
     }
   },
   data: () => ({
@@ -22,32 +36,26 @@ export default defineComponent({
         id
       })
     },
-    onInputSearchUsername(event: Event) {
-      this.searchUsername = (event.target as HTMLInputElement).value
-    },
     onSearchByName() {
       this.searchUsernamePattern = this.searchUsername.toLowerCase()
     }
-  },
-  props: {
-    msg: String
   }
 })
 </script>
 
 <template>
   <div class="block pt-4">
-    <h1>User list</h1>
-    <div class="input-group mb-3">
+    <div class="search-group input-group mb-3">
       <input
         type="text"
         class="form-control"
         placeholder="Username"
         aria-label="Username"
         aria-describedby="button-username"
-        v-on:input="onInputSearchUsername"
+        v-model="searchUsername"
+        @keyup.enter="onSearchByName"
       />
-      <button class="btn btn-primary" type="button" id="button-username" v-on:click="onSearchByName">Button</button>
+      <button class="btn btn-primary" type="button" id="button-username" @click="onSearchByName">Search</button>
     </div>
     <h4>
       <span>Total items: {{ this.users.length }}. </span>
@@ -63,11 +71,14 @@ export default defineComponent({
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(it, idx) in filteredUsers" v-bind:key="it.id">
+        <tr v-for="(it, idx) in filteredUsers" :key="it.id">
           <td>{{ idx + 1 }}</td>
           <td>{{ it.username }}</td>
           <td>{{ it.phone }}</td>
-          <td><button class="btn btn-danger" v-on:click="removeUser(it.id)">Remove</button></td>
+          <td class="table-actions d-flex justify-content-end">
+            <button class="btn btn-warning" @click="$emit('onEditUser', it.id)">Edit</button>
+            <button class="btn btn-danger ms-3" @click="removeUser(it.id)">Remove</button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -77,18 +88,8 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.search-group .btn,
+.table-actions .btn {
+  min-width: 92px;
 }
 </style>
